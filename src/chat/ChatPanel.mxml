@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="300" height="120"
+		 creationComplete="onCreationComplete(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.mangogames.services.SFSInterface;
+			import com.mangogames.signals.ProxySignals;
+			
+			import mx.events.FlexEvent;
+			import mx.utils.StringUtil;
+			
+			import spark.events.TextOperationEvent;
+			
+			
+			
+			private var _currentRoomId:int;
+			private var _minimized:Boolean;
+			
+			private function onCreationComplete(event:FlexEvent):void
+			{
+				ProxySignals.getInstance().chatLogsRefreshSignal.add(onChatLogsRefresh);
+				ProxySignals.getInstance().toggleChatWindowSignal.add(onToggleChatWindow);
+				
+				ProxySignals.getInstance().gameRoomAdded.add(onRoomAdded);
+				ProxySignals.getInstance().gameRoomRemoved.add(onRoomRomoved);
+				
+				// start maximized
+				maximize();
+				
+				txtChat.setStyle("color", "white");
+				txtLogs.setStyle("color", "white");
+				
+			}
+			
+			private function onRoomAdded(roomId:int, roomName:String):void
+			{
+				reAdjustPositions();
+			}
+			
+			private function onRoomRomoved(roomId:int):void
+			{
+				reAdjustPositions();
+			}
+			
+			private function onChatLogsRefresh(chatLogs:ChatLogs, roomId:int):void
+			{
+				if (!chatLogs)
+					return;
+				
+				txtChat.text = "";
+				txtLogs.text = "";
+				txtMessage.text = chatLogs.text;
+				txtMessage.cursorManager.currentCursorXOffset = txtMessage.text.length;
+				txtChat.appendText(chatLogs.chats);
+				txtLogs.appendText(chatLogs.logs);
+				_currentRoomId = roomId;
+				
+				/*if (chatLogs.isMinimized)
+					onToggleChatWindow(true, _currentRoomId);
+				else
+					onToggleChatWindow(false, _currentRoomId);*/
+			}
+			
+			private function onClickSend(event:MouseEvent):void
+			{
+				if(SFSInterface.getInstance().getGameRoom(_currentRoomId).chatLogs.isSpectator)
+					return;
+				SFSInterface.getInstance().sendPublicMessage(StringUtil.trim(txtMessage.text), _currentRoomId);
+				SFSInterface.getInstance().getGameRoom(_currentRoomId).chatLogs.text = "";
+				txtMessage.text = "";
+				btnSend.enabled = false;
+			}
+			
+			private function onMessageChange(event:TextOperationEvent):void
+			{
+				if(SFSInterface.getInstance().getGameRoom(_currentRoomId).chatLogs.isSpectator)
+				{
+					txtMessage.text	= "";
+					return;
+				}
+				
+				if(SFSInterface.getInstance().isSpectator(_currentRoomId))
+				{
+					txtMessage.text	= "";
+					return;
+				}
+				
+				btnSend.enabled = StringUtil.trim(txtMessage.text).length > 0;
+				SFSInterface.getInstance().getGameRoom(_currentRoomId).chatLogs.text = txtMessage.text;
+			}
+			
+			private function onKeyDown(event:KeyboardEvent):void
+			{
+				if (event.keyCode == Keyboard.ENTER)
+					onClickSend(null);
+			}
+			
+			private function onClickMimize(event:MouseEvent):void
+			{
+				toggleMinimize();
+			}
+			
+			private function onToggleChatWindow(shouldMinimize:Boolean, roomId:int):void
+			{
+				if (roomId == _currentRoomId)
+				{
+					if (shouldMinimize)
+						minimize();
+					else
+						maximize();
+				}
+				else
+				{
+					SFSInterface.getInstance().getGameRoom(roomId).chatLogs.isMinimized = shouldMinimize;
+				}
+			}
+			
+			private function toggleMinimize():void
+			{
+				_minimized = !_minimized;
+				if (_minimized)
+					minimize();
+				else
+					maximize();
+			}
+			
+			private function minimize():void
+			{
+				if(SFSInterface.getInstance().getGameRoom(_currentRoomId))
+					SFSInterface.getInstance().getGameRoom(_currentRoomId).chatLogs.isMinimized = true;
+				
+				chatContainer.visible	= false;
+				logContainer.visible	= false;
+				//grpContainer.visible = false;
+				_minimized = true;
+			}
+			
+			private function maximize():void
+			{
+				if(SFSInterface.getInstance().getGameRoom(_currentRoomId))
+					SFSInterface.getInstance().getGameRoom(_currentRoomId).chatLogs.isMinimized = false;
+				
+				chatContainer.visible	= true;
+				_minimized = false;
+			}
+			
+			protected function onChatBtnClickHandler(event:MouseEvent):void
+			{
+				chatContainer.visible	= chatContainer.visible?false:true;
+				logContainer.visible	= false;
+			}
+			
+			protected function onLogBtnClickHandler(event:MouseEvent):void
+			{
+				logContainer.visible	= logContainer.visible?false:true;
+				chatContainer.visible	= false;
+			}
+			
+			private function reAdjustPositions():void
+			{
+				if(SFSInterface.getInstance().GameRooms.length == 1)
+				{
+					chatBtn.x	= 150;
+					logBtn.x	= 190;
+				}
+				else
+				{
+					chatBtn.x	= 210;
+					logBtn.x	= 250;
+				}
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<!-- buttons-->
+	<s:Button id="chatBtn"  x="210" y="140" click="onChatBtnClickHandler(event)" skinClass="ChatBtnSkin" />
+	
+	<s:Button id="logBtn"  x="260" y="140" click="onLogBtnClickHandler(event)" skinClass="LogBtnSkin"/>
+	
+	<s:Group id="chatContainer" x="10" y="10" width="300" height="130">
+		<s:NavigatorContent label="Chat">	
+			<s:Image id="bg" source="@Embed('assets/themes/defaultTheme/images/message_popup.png')" x="0" y="5" />
+			<s:TextArea id="txtChat" x="10" y="22"  width="275" height="82" editable="false" fontSize="11.5" contentBackgroundColor="0x0"/>
+			<s:TextInput id="txtMessage" x="10" y="103" width="223" height="20" change="onMessageChange(event)" keyUp="onKeyDown(event)" />
+			<s:Button id="btnSend" label="Send" x="237" y="103" width="50" height="20" enabled="false" click="onClickSend(event)"/>
+		</s:NavigatorContent>
+	</s:Group>
+	
+	<s:Group id="logContainer" x="10" y="10" width="300" height="130" visible="false">
+		<s:NavigatorContent label="Logs">
+			<s:Image   source="@Embed('assets/themes/defaultTheme/images/message_popup.png')" x="0" y="5" />
+			<s:TextArea id="txtLogs" x="6" y="22" width="280" height="85" editable="false" fontSize="11.5" contentBackgroundColor="0x0"/>
+		</s:NavigatorContent>
+	</s:Group>
+	
+	<s:Button id="btnMinimize" click="onClickMimize(event)" visible="false"/>
+	
+</s:Group>
+
+
+
+
+
+
+

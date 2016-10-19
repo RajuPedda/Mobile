@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker -->
+<!-- $TexturePacker:SmartUpdate:06c55c1638f7ce5b712e24c1bbf9aad3:58b617ee6740cb59e9184537d020d76f:7c137308b6f23053fa8a60fdc1473c06$ -->
+<TextureAtlas imagePath="popups.png" width="1446" height="504">
+	<SubTexture name="buyIn" x="1084" y="2" width="323" height="273" />
+	<SubTexture name="discards_popup" x="682" y="412" width="296"
+		height="90" />
+	<SubTexture name="history_popup" x="682" y="2" width="400"
+		height="206" />
+	<SubTexture name="msg_popup" x="682" y="210" width="360"
+		height="200" />
+	<SubTexture name="popup_bg" x="1341" y="277" width="103"
+		height="105" />
+	<SubTexture name="report_poup" x="1044" y="277" width="295"
+		height="207" />
+	<SubTexture name="score_board_popup" x="2" y="2" width="678"
+		height="464" />
+</TextureAtlas>

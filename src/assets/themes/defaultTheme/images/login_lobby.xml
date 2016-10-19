@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:a7690f913f66e85059673e7e27fab561:7b74cd799735874f9f1606e8e41a74d7:5ccdcd98c1043003cf791c554ae48b3a$ -->
+<TextureAtlas imagePath="login_lobby.png" width="1636" height="900">
+    <SubTexture name="01" x="1" y="1" width="1024" height="768"/>
+    <SubTexture name="05_ui_bg_06" x="1490" y="397" width="138" height="34"/>
+    <SubTexture name="05_ui_bg_07" x="1027" y="759" width="307" height="42"/>
+    <SubTexture name="05_ui_bg_08" x="1" y="771" width="1024" height="60"/>
+    <SubTexture name="JOIN" x="1490" y="433" width="83" height="26"/>
+    <SubTexture name="MY TABLE" x="1490" y="461" width="65" height="22" frameX="-2" frameY="-1" frameWidth="68" frameHeight="24"/>
+    <SubTexture name="T&amp;C" x="893" y="837" width="110" height="13"/>
+    <SubTexture name="Tables" x="1490" y="485" width="65" height="22" frameX="-2" frameY="-1" frameWidth="68" frameHeight="24"/>
+    <SubTexture name="addchip_btn" x="1336" y="759" width="37" height="37"/>
+    <SubTexture name="change_password" x="1215" y="803" width="168" height="48"/>
+    <SubTexture name="clickhere_text" x="893" y="852" width="80" height="25"/>
+    <SubTexture name="connecting" x="1027" y="701" width="371" height="56"/>
+    <SubTexture name="line" x="1" y="833" width="1004" height="2"/>
+    <SubTexture name="login_bg" x="1027" y="1" width="608" height="243"/>
+    <SubTexture name="login_btn" x="1400" y="701" width="183" height="98"/>
+    <SubTexture name="logo_05" x="1490" y="246" width="144" height="103"/>
+    <SubTexture name="logout_btn" x="1385" y="801" width="168" height="48"/>
+    <SubTexture name="more_btn" x="1027" y="803" width="186" height="37"/>
+    <SubTexture name="network_full" x="1490" y="509" width="43" height="43"/>
+    <SubTexture name="network_nil" x="1490" y="554" width="43" height="43"/>
+    <SubTexture name="signup_bg" x="1027" y="246" width="461" height="453"/>
+    <SubTexture name="signup_btn" x="1" y="837" width="583" height="61"/>
+    <SubTexture name="sounds" x="1385" y="851" width="168" height="48"/>
+    <SubTexture name="submit_btn" x="1490" y="351" width="131" height="44"/>
+    <SubTexture name="type_box" x="586" y="837" width="305" height="52"/>
+    <SubTexture name="version" x="1005" y="842" width="168" height="48"/>
+</TextureAtlas>
